@@ -4,13 +4,13 @@
 
 本项目采用Python开发，用于和开源的金融级区块链底层平台FISCO BCOS( https://www.github.com/FISCO-BCOS/ ) 建立JSONRPC协议的通信。支持版本为FISCO BCOS 2.0 RC1~RC3以及后续版本。
 
-意图是构建一个代码尽量少，逻辑尽情轻，层级尽量浅，结构容易理解，可快速复用二次开发的python语言的客户端，所以命名内嵌了"lite"，也并没有生成正式发行包，仅全部开源代码，采用MIT License，欢迎社区体验、修订、增补优化，打造顺手的FISCO BCOS Python客户端。
+意图是构建一个代码尽量少，逻辑尽量轻，层级尽量浅，结构容易理解，可快速复用二次开发的python语言的客户端，所以命名内嵌了"lite"，也并没有生成正式发行包，仅全部开源代码，采用MIT License，欢迎社区体验、修订、增补优化，打造顺手的FISCO BCOS Python客户端。
 
-封装的接口支持所有FISCO BCOS2.0 JSON RPC定义，支持交易输入输出、event log等abi数据拼装和解析，支持直观的keystore账户管理(创建和加载等)，部署合约后保存最新地址和记录部署历史，基本上是一个简单而完整的fisco bcos 2.0客户端SDK。
+封装的接口支持所有FISCO BCOS2.0 JSON RPC定义，支持交易输入输出、event log等abi数据拼装和解析，支持直观的keystore账户管理(创建和加载等)，部署合约后保存最新地址和记录部署历史，基本上是一个简单而完整的FISCO BCOS 2.0客户端SDK。
 
 实现了一个命令行的console交互，简单配置后可以和节点通过JSON RPC接口通信，创建帐号、部署合约、发送交易查询信息。
 
-运行此客户端前应先安装FISCO BCOS节点，并组成一个可正常运行的链，参见[FISCO BCOS安装](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/installation.html)，顺利的话只需不到5分钟，也可以安装[官方控制台](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/installation.html#id7)进行体验
+运行此客户端前应先安装FISCO BCOS节点，并组成一个可正常运行的链，参见[FISCO BCOS安装](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/installation.html)，顺利的话只需不到5分钟，也可以安装[官方控制台](https://fisco-bcos-documentation.readthedocs.io/zh_CN/latest/docs/installation.html#id7)进行体验。
 
 ## update list：
 
@@ -24,7 +24,7 @@
 
 ## linux环境准备：
 
-安装和使用，参见本目录下的 [linux_python_setup.md](./linux_python_setup.md)
+环境工具的安装和使用，参见本目录下的 [linux_python_setup.md](./linux_python_setup.md)
 
 熟悉pyenv和virtualenv的话应该比较顺利，也可以直接安装python3。强烈推荐多环境python设定。
 
@@ -33,9 +33,9 @@
 	pyenv install 3.7.3 -v 
 	
 	pyenv shell 3.7.3
-
+	
 	pyenv rehash 
-
+	
 	pyenv virtualenv 3.7.3 blc
 	
 	pyenv activate blc
@@ -55,13 +55,13 @@
 以下在windows的cmd环境工作
 
     1.安装命令：pip install virtualenv
-
+    
     2.建立一个工作目录，如d:\python_env,进入d:\python_env
-
+    
     3.创建一个独立的python环境: virtualenv blc  ("blc"为环境名，可用其他名字)
-
+    
     4.运行：blc\Scripts\activate.bat
-
+    
     5.更新pip: pip install --upgrade pip
 
 可以看到命令行前面多了（blc），独立的名为blc的python环境建立完成
@@ -74,11 +74,11 @@
 ## 获取项目代码：
 
 	git clone https://github.com/FISCO-BCOS/python-sdk
-	
+
 依次运行：
 	
 	cd python-sdk
-
+	
 	pip install -r requirements.txt
 
 以上为安装依赖库
@@ -114,7 +114,7 @@
     cp /data/fisco-bcos/nodes/127.0.0.1/sdk/ca.crt ./bin
     cp /data/fisco-bcos/nodes/127.0.0.1/sdk/node.crt ./bin
     cp /data/fisco-bcos/nodes/127.0.0.1/sdk/node.key ./bin
-	
+
 修改配置后，运行一个简单命令确认和节点连接是否正常
 
 	python console.py getNodeVersion
@@ -142,7 +142,7 @@ logger配置参见client/clientlogger.py。默认在bin/logs下生成滚动日�
 abi文件定义了合约的事务方法，只读方法，事件等，只要得知abi,即可采用console.py，指定方法名，合约地址，正确的参数列表，调用abi里定义的方法。不需要类似java客户端那样再生成一组面向特定合约的客户端代码组件。
 
 如SimpleInfo.sol合约里定义了 
-   
+
     function set(string n,uint256 b,address a) public returns(int)
 
 对应的命令是 
@@ -185,12 +185,12 @@ demo_client.py和demo_get.py演示调用client/bcosclient.py里实现的接口�
 		create a new account ,save to :[bin/accounts] (default) , the path in client_config.py:[account_keyfile_path]
 		if account file has exist ,then old file will save to a backup
 		if "save" arg follows,then backup file and write new without ask
-
+	
 	3): deploy [contract_binary_file] [save]
 		部署合约,合约来自编译后的bin文件（部署命令为了审慎起见，需要指定bin文件的全路径）。如给出'save'参数，新地址会写入本地记录文件
 		ndeploy contract from a binary file,eg: deploy contracts/SimpleInfo.bin
 		if 'save' in args, so save addres to file
-
+	
 	4): call [contractname] [address] [func]  [args...]
 		call合约的一个只读接口,解析返回值
 		call a constant funciton of contract and get the returns
@@ -211,24 +211,24 @@ demo_client.py和demo_get.py演示调用client/bcosclient.py里实现的接口�
 		各种get接口，查询节点的各种状态（不一一列出，可用list指令查看接口列表和参数名）
 		neg: [getBlockByNumber 10 true].
 		use 'python console.py list' to show all get cmds
-
+	
 	7): list
 		列出所有支持的get接口名和参数
 		list: list all  getcmds  has implemented (getBlock...getTransaction...getReceipt..getOthers)
-
+	
 	8): int [hex number]
 		输入一个十六进制的数字，转为十进制（考虑到json接口里很多数字都是十六进制的，所以提供这个功能）
 		convert a hex str to int ,eg: int 0x65
-
+	
 	9): txinput [contractname] [inputdata(in hex string)]
 		复制一段来自transaction的inputdata(十六进制字符串)，指定合约名，则可以自动解析（合约的abi文件应存在指定目录下）
 		parse the transaction input data by  contractname，eg: txinput SimpleInfo [txinputdata]
-
+	
 	10): checkaddr [address]
 		将普通地址转为自校验地址,自校验地址使用时不容易出错
 		change address to checksum address according EIP55:
 		to_checksum_address: 0xf2c07c98a6829ae61f3cb40c69f6b2f035dd63fc -> 0xF2c07c98a6829aE61F3cB40c69f6b2f035dD63FC
-		
+
 ----------------------------------------------------------------------------
 ## 主要基础模块
 
@@ -253,11 +253,11 @@ demo_client.py和demo_get.py演示调用client/bcosclient.py里实现的接口�
 **bcosclient.py** 里实现的发送交易接口为：
 
     deploy：部署合约
-
+    
     call： 调用合约接口，返回只读的数据
-
+    
     sendRawTransaction：返回transactionHash
-
+    
     sendRawTransactionGetReceipt : 发送交易后等待共识完成，检索receipt，
 
 sendRawTransaction这两个方法可用于所有已知abi的合约，传入abi定义，方法名，正确的参数列表，即可发送交易。交易由BcosClient里加载的账号进行签名。
@@ -273,11 +273,11 @@ sendRawTransaction这两个方法可用于所有已知abi的合约，传入abi�
 主要方法有：
 
     parse_abi: 将abi文件里的function和event解析为字典索引，其中function的索引方式为name和4字节selector两种，供后续查询.func_abi_map_by_selector,func_abi_map_by_name,event_abi_map这几个dict即为字典索引对象     
-
+    
     parse_transaction_input: 用于transaction，用于查询交易后解析input数据（方法+参数）
-
+    
     parse_receipt_output： 用于receipt，解析合约接口的返回值
-
+    
     parse_event_logs：用于receipt，解析eventlog数组，增加eventname，eventdata两个数据
 
 
@@ -295,7 +295,7 @@ sendRawTransaction这两个方法可用于所有已知abi的合约，传入abi�
 		event_abi_to_log_topic,  #输入event的abi，输出event里的topic串
 		encode_hex,decode_hex #16进制串编解码
 		)
-
+	
 	from utils.abi import  (
 		filter_by_type, #通过类型选择一组元素，如"function","event"等
 		abi_to_signature, #输入方法名，输出可读的方法定义如 "set(uint256,string)"
@@ -326,5 +326,5 @@ todolist:
     2：和节点之间的异步通信
     3：节点事件监听
     4：Channel协议支持 (2019.07实现)
-	5：AMOP topic协议支持
+    5：AMOP topic协议支持
     5：性能优化
